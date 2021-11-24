@@ -15,7 +15,7 @@ class Planet:
         self.x = 640
         self.angle = 0
         self.y = 360
-        self.image = tkinter.PhotoImage(file='test.png')
+        self.image = tkinter.PhotoImage(file='earth.png')
         self.id = canv.create_image(self.x, self.y, image=self.image)
 
     def show_info(self):
