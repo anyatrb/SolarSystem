@@ -1,6 +1,5 @@
 import tkinter
 import math
-import time
 
 root = tkinter.Tk()
 root.geometry('1280x720')
@@ -27,15 +26,14 @@ class Planet:
         self.v = (365 / self.days) * earthv
         self.angle += self.v
         self.x = 640 + self.r * math.cos(self.angle)
-        self.y = 360 + self.r * math.sin(self.angle)       
+        self.y = 360 + self.r * math.sin(self.angle)
         canv.coords(self.id,
                     self.x,
                     self.y,)
         canv.after(32, self.move)
 
-        
+
 earthv = 0.01
 earth = Planet()
 earth.move()
-root.mainloop()        
-        
+root.mainloop()
