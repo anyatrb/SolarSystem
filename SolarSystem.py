@@ -38,9 +38,18 @@ class Planet:
         self.angle = randrange(0, 6)
         self.y = HEIGHT / 2
         self.image = tkinter.PhotoImage(file=img+'.png')
+        self.trail = canv.create_oval(WIDTH/2 - self.r,
+                                      HEIGHT/2 + self.r,
+                                      WIDTH/2 + self.r,
+                                      HEIGHT/2 - self.r, fill='',
+                                      outline='blue', width=2,
+                                      activeoutline='lightblue')
         self.id = canv.create_image(self.x, self.y, image=self.image)
-
+        
     def show_info(self, event):
+        for planet in planets:
+            canv.itemconfig(planet.trail, outline='blue')
+        canv.itemconfig(self.trail, outline='lightblue')
         canv.itemconfig(info, text=self.name + '\n\n' +
                         'Период обращения вокруг Солнца: \n' +
                         str(self.days) + ' сут.\n' +
@@ -149,5 +158,6 @@ planets = []
 init_planets()
 for planet in planets:
     canv.tag_bind(planet.id, '<Button-1>', planet.show_info)
+    canv.tag_bind(planet.trail, '<Button-1>', planet.show_info)
     planet.move()
 root.mainloop()             
