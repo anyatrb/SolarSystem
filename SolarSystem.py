@@ -6,15 +6,18 @@ WIDTH = 1280
 HEIGHT = 900
 root = tkinter.Tk()
 root.title('Solar System')
+root.resizable(False, False)
 root.geometry('1280x900')
-canv = tkinter.Canvas(root)
+canv = tkinter.Canvas(root, highlightthickness=0)
 canv.pack(fill=tkinter.BOTH, expand=1)
 
 bg = tkinter.PhotoImage(file='space.png')
 canv.create_image(WIDTH/2, HEIGHT/2, image=bg)
 
-
-canv.create_rectangle(0, 0, 150, HEIGHT, fill='purple', width=3)
+canv.create_rectangle(1, 0, 150, HEIGHT, fill='purple',
+                      outline='white', width=3)
+canv.create_rectangle(1130, 0, WIDTH, HEIGHT, fill='purple',
+                      outline='white', width=3)
 info = canv.create_text(75, HEIGHT/2, fill='white',
                         width=150, justify=tkinter.CENTER)
 
@@ -98,13 +101,53 @@ def init_planets():
     planets.append(saturn)
     planets.append(uranus)
     planets.append(neptune)
-    
+
+def change_speed(button):
+    global earthv
+    dv = 0.005
+    if earthv >= 0.0:
+        if button == 1:
+            earthv += dv
+        elif button == 2:
+            earthv -= dv
+        elif button == 3:
+            earthv += 10 * dv
+        elif button == 4:
+            earthv -= 10 * dv
+        elif button == 6:
+            earthv = 0.01
+    if earthv <= 0.0 or button == 5:
+        earthv = 0.0
+    canv.itemconfig(speedtxt, text='Текущая орбитальная скорость Земли: \n' +
+                              str(round(earthv * 2979, 3)) + ' км/с')        
 
 earthv = 0.01
+up = tkinter.Button(canv, cursor='top_side', width=10,
+                    command=lambda b=1: change_speed(b), text='Скорость+')
+down = tkinter.Button(canv, cursor='bottom_side', width=10,
+                      command=lambda b=2: change_speed(b), text='Скорость-')
+up2 = tkinter.Button(canv, cursor='sb_up_arrow', width=10,
+                      command=lambda b=3: change_speed(b), text='Скорость+++')
+down2 = tkinter.Button(canv, cursor='sb_down_arrow', width=10,
+                      command=lambda b=4: change_speed(b), text='Скорость---')
+set0 = tkinter.Button(canv, cursor='X_cursor', width=10,
+                      command=lambda b=5: change_speed(b), text='0.0 км/с')
+default = tkinter.Button(canv, cursor='exchange', width=10,
+                      command=lambda b=6: change_speed(b), text='Сбросить')
+up.place(x=1167, y=HEIGHT/2 - 100)
+down.place(x=1167, y=HEIGHT/2 + 100)
+up2.place(x=1167, y=HEIGHT/2 - 150)
+down2.place(x=1167, y=HEIGHT/2 + 150)
+set0.place(x=1167, y=HEIGHT/2 + 200)
+default.place(x=1167, y=HEIGHT/2 + 250)
+speedtxt = canv.create_text(1205, HEIGHT/2, fill='white', width=150,
+                            justify=tkinter.CENTER,
+                            text='Текущая орбитальная скорость Земли: \n' +
+                            str(earthv * 2979) + ' км/с')
+
 planets = []
 init_planets()
 for planet in planets:
     canv.tag_bind(planet.id, '<Button-1>', planet.show_info)
     planet.move()
-root.mainloop()        
-        
+root.mainloop()             
