@@ -21,6 +21,7 @@ canv.create_rectangle(1130, 0, WIDTH, HEIGHT, fill='purple',
 info = canv.create_text(75, HEIGHT/2, fill='white',
                         width=150, justify=tkinter.CENTER)
 
+
 class Planet:
     """Класс для представления планеты.
 
@@ -49,7 +50,6 @@ class Planet:
     show_info() -  показывает или меняет информацию о нажатой планете на
                    панели слева
     move() - двигает планету по окружности каждые 15 мс
-    
     """
 
     def __init__(self, img, r, days, e, ov, m, pr, d, temp, atm, name=''):
@@ -63,14 +63,14 @@ class Planet:
         e - вещественное число, эксцентриситет планеты для вывода в информации
         ov - вещественное число, орбитальная скорость в км/с
              для вывода в информации
-        m - вещественное число, масса планеты в 10^24 кг для вывода в информации
+        m - вещественное число, масса планеты в 10^24 кг для
+                                                    вывода в информации
         pr - целое число, радиус самой планеты для вывода в информации
         d - вещественное число, плотность планеты в г/см3
             для вывода в информации
         temp - целое число, температура в К для вывода в информации
         atm - строка, доп. информация про атмосферу планеты
         name - строка, имя планеты для вывода в информации
-        
         """
         self.r = r
         self.days = days
@@ -93,7 +93,7 @@ class Planet:
                                       outline='blue', width=2,
                                       activeoutline='lightblue')
         self.id = canv.create_image(self.x, self.y, image=self.image)
-        
+
     def show_info(self, event):
         """При вызове показывает или меняет информацию о нажатой планете на
         панели слева.
@@ -114,7 +114,7 @@ class Planet:
                         'Средняя температура поверхности: \n' +
                         str(self.temp) + ' К\n\n' +
                         'Атмосфера ' + self.atm)
-    
+
     def move(self):
         """Двигает планету по окружности каждые 15 мс, при этом
         скорость зависит от скорости земли.
@@ -122,11 +122,12 @@ class Planet:
         self.v = (365 / self.days) * earthv
         self.angle += self.v
         self.x = WIDTH / 2 + self.r * math.cos(self.angle)
-        self.y = HEIGHT / 2 + self.r * math.sin(self.angle)       
+        self.y = HEIGHT / 2 + self.r * math.sin(self.angle)
         canv.coords(self.id,
                     self.x,
                     self.y,)
         canv.after(15, self.move)
+
 
 def init_planets():
     """Создает объекты всех планет, внося в каждую данные о планете."""
@@ -143,8 +144,8 @@ def init_planets():
                    ' морские соли, продукты горения)', 'Земля')
     mars = Planet('mars', 250, 687, 0.0934, 24.13, 0.642, 3389,
                   3.9335, 227, 'имеет следующий состав: углекислый газ — 95%' +
-                   ', азот — 2,5, атомарный водород, аргон — 1,6%, остальное' +
-                   ' — водяные пары, кислород', 'Марс')
+                  ', азот — 2,5, атомарный водород, аргон — 1,6%, остальное' +
+                  ' — водяные пары, кислород', 'Марс')
     jupiter = Planet('jupiter', 300, 12*365, 0.0485, 13.06, 1898.6, 69911,
                      1.326, 165, 'состоит из водорода (89 %) и гелия (11 %)' +
                      ', напоминая по химическому составу Солнце', 'Юпитер')
@@ -166,13 +167,13 @@ def init_planets():
     planets.append(uranus)
     planets.append(neptune)
 
+
 def change_speed(button):
     """Меняет скорость Земли в зависимости от того, какая из кнопок управления
     была нажата.
 
     Аргументы:
     button - целое число от 1 до 6, определяет код нажатой кнопки
-    
     """
     global earthv
     dv = 0.005
@@ -190,8 +191,7 @@ def change_speed(button):
     if earthv <= 0.0 or button == 5:
         earthv = 0.0
     canv.itemconfig(speedtxt, text='Текущая орбитальная скорость Земли: \n' +
-                              str(round(earthv * 2979, 3)) + ' км/с')
-    
+                    str(round(earthv * 2979, 3)) + ' км/с')
 """Программа симулирует поведение планет Солнечной Системы с возможностью
 получить информацию о каждой планете.
 """
@@ -201,13 +201,13 @@ up = tkinter.Button(canv, cursor='top_side', width=10,
 down = tkinter.Button(canv, cursor='bottom_side', width=10,
                       command=lambda b=2: change_speed(b), text='Скорость-')
 up2 = tkinter.Button(canv, cursor='sb_up_arrow', width=10,
-                      command=lambda b=3: change_speed(b), text='Скорость+++')
+                     command=lambda b=3: change_speed(b), text='Скорость+++')
 down2 = tkinter.Button(canv, cursor='sb_down_arrow', width=10,
-                      command=lambda b=4: change_speed(b), text='Скорость---')
+                       command=lambda b=4: change_speed(b), text='Скорость---')
 set0 = tkinter.Button(canv, cursor='X_cursor', width=10,
                       command=lambda b=5: change_speed(b), text='0.0 км/с')
 default = tkinter.Button(canv, cursor='exchange', width=10,
-                      command=lambda b=6: change_speed(b), text='Сбросить')
+                         command=lambda b=6: change_speed(b), text='Сбросить')
 up.place(x=1167, y=HEIGHT/2 - 100)
 down.place(x=1167, y=HEIGHT/2 + 100)
 up2.place(x=1167, y=HEIGHT/2 - 150)
@@ -225,4 +225,4 @@ for planet in planets:
     canv.tag_bind(planet.id, '<Button-1>', planet.show_info)
     canv.tag_bind(planet.trail, '<Button-1>', planet.show_info)
     planet.move()
-root.mainloop()             
+root.mainloop()
